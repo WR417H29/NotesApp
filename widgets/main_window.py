@@ -53,3 +53,4 @@ class MainWindow(qtw.QMainWindow):
     
     def createNote(self):
         self.noteView.createNote()
+    

@@ -41,3 +41,11 @@ class NoteRepository:
         cur.execute(query, [note.title, note.content])
         con.commit()
         con.close()
+    
+    def deleteNote(self, id: int) -> None:
+        query = "DELETE FROM notes WHERE id=?"
+        con = sql.connect(self.conStr)
+        cur = con.cursor()
+        cur.execute(query, [id])
+        con.commit()
+        con.close()

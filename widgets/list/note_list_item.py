@@ -1,18 +1,21 @@
 import PyQt6.QtWidgets as qtw
 import PyQt6.QtGui as qtg
+from data.note_repository import NoteRepository
 
 from models.note import Note
 
 class NoteListItem(qtw.QWidget):
-    def __init__(self, note: Note, onClickFunc):
+    def __init__(self, note: Note, conStr: str, openNote, populateScrollItems):
         super().__init__()
-        self.function = onClickFunc
+        self.openNote = openNote
         self.note = note
+        self.psi = populateScrollItems
+        self.repo = NoteRepository(conStr)
         self.mainLayout = qtw.QVBoxLayout()
         self.itemLayout = qtw.QHBoxLayout()
 
-        self.button = qtw.QPushButton()
-        self.button.clicked.connect(self.onClick)
+        self.openNoteButton = qtw.QPushButton()
+        self.openNoteButton.clicked.connect(self.openNoteFunc)
         self.build()
 
     def build(self):
@@ -25,17 +28,28 @@ class NoteListItem(qtw.QWidget):
         title.setMinimumWidth(82)
         title.setStyleSheet('background: white')
 
+        delete = qtw.QPushButton('X')
+        delete.setFont(qtg.QFont('Fira Code', 10))
+        delete.setMaximumWidth(10)
+        delete.setStyleSheet('background: white')
+        delete.clicked.connect(self.deleteNoteFunc)
+
         self.itemLayout.addWidget(image)
         self.itemLayout.addWidget(title)
+        self.itemLayout.addWidget(delete)
 
-        self.button.setLayout(self.itemLayout)
-        self.button.setMinimumSize(140, 40)
+        self.openNoteButton.setLayout(self.itemLayout)
+        self.openNoteButton.setMinimumSize(140, 40)
         
-        self.mainLayout.addWidget(self.button)
+        self.mainLayout.addWidget(self.openNoteButton)
         self.setLayout(self.mainLayout)
         self.setMinimumWidth(100)
 
         self.setStyleSheet('background: gray; border: 1px solid black')
 
-    def onClick(self):
-        self.function(self.note.id)
+    def openNoteFunc(self):
+        self.openNote(self.note.id)
+
+    def deleteNoteFunc(self):
+        self.repo.deleteNote(self.note.id)
+        self.psi()

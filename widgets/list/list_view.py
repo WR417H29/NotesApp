@@ -10,6 +10,7 @@ class ListView(qtw.QWidget):
     def __init__(self, conStr: str, openNoteFunc, createNoteFunc):
         super().__init__()
         self.repo = NoteRepository(conStr)
+        self.conStr = conStr
         self.openNoteFunc = openNoteFunc
         self.createNoteFunc = createNoteFunc
         self.layout = qtw.QVBoxLayout()
@@ -46,7 +47,7 @@ class ListView(qtw.QWidget):
         
     def _repopulateScrollItems(self):
         for note in self.repo.getAllNotes():
-            noteWidget = NoteListItem(note, self.openNoteFunc)
+            noteWidget = NoteListItem(note, self.conStr, self.openNoteFunc, self.populateScrollItems)
             self.scrollItems.addWidget(noteWidget)
 
     def newNoteClicked(self):
