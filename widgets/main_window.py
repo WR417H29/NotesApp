@@ -9,7 +9,7 @@ from widgets.notes.note_view import NoteView
 class MainWindow(qtw.QMainWindow):
     def __init__(self) -> None:
         super().__init__()
-        self.connectionString = "assets/db.db"
+        self.connectionString = "assets/notes.db"
         self.init_db()
 
         self.size = [1920//4, 1080//4, 1920//2, 1080//2]
@@ -39,10 +39,10 @@ class MainWindow(qtw.QMainWindow):
 
         self.cur.execute("""
         CREATE TABLE IF NOT EXISTS 'notes' (
-        'id'        INTEGER NOT NULL UNIQUE,
-        'title'	    TEXT NOT NULL,
-        'content'	TEXT NOT NULL,
-        PRIMARY KEY('id' AUTOINCREMENT)
+            'id'        INTEGER NOT NULL UNIQUE,
+            'title'	    TEXT NOT NULL,
+            'content'	TEXT NOT NULL,
+            PRIMARY KEY('id' AUTOINCREMENT) 
         );
         """)
 
