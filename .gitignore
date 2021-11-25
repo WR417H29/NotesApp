@@ -1,8 +1,12 @@
 .env
 .vscode
 
+build
+dist
+
 __pycache__
 *.pyc
 .python-version
 
 *.db
+*.spec

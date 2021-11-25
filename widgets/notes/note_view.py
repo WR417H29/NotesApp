@@ -45,5 +45,6 @@ class NoteView(qtw.QWidget):
         self.saveNote()
         self.titleRow.setText("")
         self.noteBody.setPlainText("")
-        self.repo.createNote(Note(None, "", ""))
+        id = self.repo.createNote(Note(None,"", ""))
+        self.openNote(id)
         

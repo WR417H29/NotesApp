@@ -34,13 +34,16 @@ class NoteRepository:
         con.commit()
         con.close()
 
-    def createNote(self, note: Note) -> None:
+    def createNote(self, note: Note) -> int:
+        """Returns the ID of the created note"""
         query = "INSERT INTO notes (title, content) VALUES (?, ?)"
         con = sql.connect(self.conStr)
         cur = con.cursor()
         cur.execute(query, [note.title, note.content])
+        id = cur.execute("SELECT last_insert_rowid()").fetchone()
         con.commit()
         con.close()
+        return id[0]
     
     def deleteNote(self, id: int) -> None:
         query = "DELETE FROM notes WHERE id=?"
