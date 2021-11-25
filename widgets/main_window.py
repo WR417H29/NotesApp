@@ -9,22 +9,22 @@ from widgets.notes.note_view import NoteView
 class MainWindow(qtw.QMainWindow):
     def __init__(self) -> None:
         super().__init__()
-        self.connectionString = "assets/notes.db"
-        self.init_db()
+        self.connectionString: str = "assets/notes.db"
 
-        self.size = [1920//4, 1080//4, 1920//2, 1080//2]
-        self.setGeometry(*self.size)
-        self.title = "Notes App"
-        self.mainWidget = qtw.QWidget()
+        self.size: List[int] = [1920//6, 1080//6, 1920//1.5, 1080//1.5]
+        self.title: str = "Notes App"
+        self.mainWidget: qtw.QWidget = qtw.QWidget()
 
-        self.listView = ListView(self.connectionString, self.openNote, self.createNote)
+        self.listView: ListView = ListView(self.connectionString, self.openNote, self.createNote)
+        self.noteView: NoteView = NoteView(self.connectionString, self.listView)
         self.listView.setMinimumWidth(200)
-        self.noteView = NoteView(self.connectionString, self.listView)
 
+        self.init_db()
+        self.setGeometry(*self.size)
         self.build()
 
     def build(self) -> None:
-        self.layout = qtw.QHBoxLayout()
+        self.layout: qtw.QLayout = qtw.QHBoxLayout()
         self.layout.addWidget(self.listView)  
         self.layout.addWidget(self.noteView, 2)
         self.mainWidget.setLayout(self.layout)
@@ -34,8 +34,8 @@ class MainWindow(qtw.QMainWindow):
 
 
     def init_db(self) -> None:
-        self.con = sql.connect(self.connectionString)
-        self.cur = self.con.cursor()
+        self.con: sql.Connection = sql.connect(self.connectionString)
+        self.cur: sql.Cursor = self.con.cursor()
 
         self.cur.execute("""
         CREATE TABLE IF NOT EXISTS 'notes' (
@@ -48,9 +48,9 @@ class MainWindow(qtw.QMainWindow):
 
         self.con.close()
 
-    def openNote(self, id: int):
+    def openNote(self, id: int) -> None:
         self.noteView.openNote(id)
     
-    def createNote(self):
+    def createNote(self) -> None:
         self.noteView.createNote()
     
