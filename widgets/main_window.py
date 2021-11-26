@@ -9,17 +9,17 @@ from widgets.notes.note_view import NoteView
 class MainWindow(qtw.QMainWindow):
     def __init__(self) -> None:
         super().__init__()
-        self.connectionString: str = "assets/notes.db"
+        self.connectionString = "assets/notes.db"
+        self.init_db()
 
         self.size: List[int] = [1920//6, 1080//6, 1920//1.5, 1080//1.5]
-        self.title: str = "Notes App"
-        self.mainWidget: qtw.QWidget = qtw.QWidget()
+        self.title = "Notes App"
+        self.mainWidget = qtw.QWidget()
 
-        self.listView: ListView = ListView(self.connectionString, self.openNote, self.createNote)
-        self.noteView: NoteView = NoteView(self.connectionString, self.listView)
+        self.listView = ListView(self.connectionString, self.openNote, self.createNote)
+        self.noteView = NoteView(self.connectionString, self.listView)
         self.listView.setMinimumWidth(200)
 
-        self.init_db()
         self.setGeometry(*self.size)
         self.build()
 
@@ -32,10 +32,9 @@ class MainWindow(qtw.QMainWindow):
         self.setCentralWidget(self.mainWidget)
         self.setWindowTitle(self.title)
 
-
     def init_db(self) -> None:
-        self.con: sql.Connection = sql.connect(self.connectionString)
-        self.cur: sql.Cursor = self.con.cursor()
+        self.con = sql.connect(self.connectionString)
+        self.cur = self.con.cursor()
 
         self.cur.execute("""
         CREATE TABLE IF NOT EXISTS 'notes' (
