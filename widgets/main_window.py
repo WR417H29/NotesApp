@@ -50,16 +50,17 @@ class MainWindow(qtw.QMainWindow):
         file = self._menuBar.addMenu("File")
         settings = self._menuBar.addMenu("Settings")
 
-        export = file.addMenu("Export")
+        save = file.addAction("Save")
+        save.triggered.connect(self.noteView.saveNote)
+        save.setShortcut(qtg.QKeySequence("Ctrl+S"))
+
+        export = file.addAction("Export")
+        export.triggered.connect(self.exportOptions.exportFolderAsText)
+        export.setShortcut(qtg.QKeySequence("Ctrl+E"))
 
         settingsMenu = settings.addAction("Menu")
         settingsMenu.triggered.connect(self.openSettings)
 
-        exportFolderMarkdown = export.addAction("Markdown")
-        exportFolderMarkdown.triggered.connect(self.exportOptions.exportFolderAsMarkdown)
-        
-        exportFolderText = export.addAction("Text")
-        exportFolderText.triggered.connect(self.exportOptions.exportFolderAsText)
 
     def openSettings(self):
         settingsMenu = SettingsMenu(self.settingsPath)

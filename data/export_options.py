@@ -10,11 +10,7 @@ class ExportOptions:
         with open (settingsPath, 'r') as f:
             self.settings = json.load(f)
 
-        self.notes = self.noteRepo.getAllNotes()
-
-    def exportFolderAsMarkdown(self):
-        print("ExportFolderAsMarkdown")
-
     def exportFolderAsText(self):
-        print("ExportFolderAsText")
-    
+        for note in self.noteRepo.getAllNotes():
+            with open (f"{self.settings['exportPath']}/{note.title}.txt", 'w') as f:
+                f.write(note.content)
