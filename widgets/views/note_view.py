@@ -2,19 +2,18 @@ import PyQt6.QtWidgets as qtw
 
 from models.note import Note
 from data.note_repository import NoteRepository
-from widgets.list.list_view import ListView
 
 class NoteView(qtw.QWidget):
-    def __init__(self, conStr: str, listView: ListView) -> None:
+    def __init__(self, connectionString, listView):
         super().__init__()
-        self.repo = NoteRepository(conStr)
+        self.repo = NoteRepository(connectionString)
         self.listView = listView
         self.mainLayout = qtw.QVBoxLayout()
         self.currentId = None
 
         self.build()
 
-    def build(self) -> None:
+    def build(self):
         self.titleRow = qtw.QLineEdit()
         self.noteBody = qtw.QTextEdit()
         saveBtn = qtw.QPushButton("Save")
@@ -26,21 +25,21 @@ class NoteView(qtw.QWidget):
 
         self.setLayout(self.mainLayout)
     
-    def saveNote(self) -> None:
-        if self.currentId == None:
-            return
+    def saveNote(self):
+        if self.currentId == None: return
+        
         note = Note(self.currentId, self.titleRow.text(), self.noteBody.toPlainText())
 
         self.repo.updateNote(note)
         self.listView.populateScrollItems()
 
-    def openNote(self, id: int) -> None:
+    def openNote(self, id):
         note = self.repo.getNoteById(id)
         self.currentId = id
         self.titleRow.setText(note.title)
         self.noteBody.setPlainText(note.content)
     
-    def createNote(self) -> None:
+    def createNote(self):
         self.saveNote()
         self.titleRow.setText("")
         self.noteBody.setPlainText("")

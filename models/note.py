@@ -1,14 +1,12 @@
-from typing import Tuple
-
 class Note:
-    def __init__(self, id: int = None, title: str = None, content: str = None) -> None:
+    def __init__(self, id = None, title = None, content = None):
         self.id = id
         self.title = title
         self.content = content
 
-    def __repr__(self) -> str:
+    def __repr__(self):
         return '<Note %s>' % self.id
 
     @staticmethod
-    def noteFromTuple(data: Tuple) -> 'Note':
+    def noteFromIterable(data):
         return Note(data[0], data[1], data[2])

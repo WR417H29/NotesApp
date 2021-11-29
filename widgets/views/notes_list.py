@@ -1,13 +1,11 @@
-from typing import Callable
-
 import PyQt6.QtWidgets as qtw
 import PyQt6.QtCore as qtc
 
-from widgets.list.note_list_item import NoteListItem
+from widgets.list_items.note_list_item import NoteListItem
 from data.note_repository import NoteRepository
 
-class ListView(qtw.QWidget):
-    def __init__(self, conStr: str, openNoteFunc: Callable[[int], None], createNoteFunc: Callable[[], None]) -> None:
+class NotesList(qtw.QWidget):
+    def __init__(self, conStr, openNoteFunc, createNoteFunc):
         super().__init__()
         self.conStr = conStr
         self.repo = NoteRepository(self.conStr)
@@ -22,7 +20,7 @@ class ListView(qtw.QWidget):
         
         self.build()
 
-    def build(self) -> None:
+    def build(self):
         self.populateScrollItems()
         
         self.scrollArea.setWidgetResizable(True)
@@ -41,19 +39,14 @@ class ListView(qtw.QWidget):
 
         self.setLayout(self.mainLayout)
     
-    def populateScrollItems(self) -> None:
-        self._wipeScrollItems()
-        self._repopulateScrollItems()
-
-    def _wipeScrollItems(self) -> None:
+    def populateScrollItems(self):
         for i in reversed(range(self.scrollItems.count())):
             self.scrollItems.itemAt(i).widget().setParent(None)
-        
-    def _repopulateScrollItems(self) -> None:
+
         for note in self.repo.getAllNotes():
             noteWidget = NoteListItem(note, self.conStr, self.openNoteFunc, self.populateScrollItems)
             self.scrollItems.addWidget(noteWidget)
 
-    def newNoteClicked(self) -> None:
+    def newNoteClicked(self):
         self.createNoteFunc()
         self.populateScrollItems()

@@ -2,15 +2,9 @@ import PyQt6.QtWidgets as qtw
 import PyQt6.QtGui as qtg
 
 from data.note_repository import NoteRepository
-from models.note import Note
 
 class NoteListItem(qtw.QWidget):
-    def __init__(self, 
-                 note: Note, 
-                 conStr: str, 
-                 openNote, 
-                 populateScrollItems
-                ) -> None:
+    def __init__(self, note, conStr, openNote, populateScrollItems):
         super().__init__()
         self.conStr = conStr
         self.note = note
@@ -24,7 +18,7 @@ class NoteListItem(qtw.QWidget):
         self.openNoteButton.clicked.connect(self.openNoteFunc)
         self.build()
 
-    def build(self) -> None:
+    def build(self):
         image = qtw.QLabel()
         image.setPixmap(qtg.QPixmap("assets/file.png"))
         image.setMaximumWidth(18)
@@ -53,9 +47,9 @@ class NoteListItem(qtw.QWidget):
 
         self.setStyleSheet('background: gray; border: 1px solid black')
 
-    def openNoteFunc(self) -> None:
+    def openNoteFunc(self):
         self.openNote(self.note.id)
 
-    def deleteNoteFunc(self) -> None:
+    def deleteNoteFunc(self):
         self.repo.deleteNote(self.note.id)
         self.psi()
