@@ -22,9 +22,10 @@ class SettingsMenu(qtw.QDialog):
 
     def buildForms(self):
         self.buildExportForm()
+        self.buildAutoSaveForm()
 
     def buildExportForm(self):
-        exportSettingsGroupBox = qtw.QGroupBox("Export Settings")
+        exportSettingsGroupBox = qtw.QGroupBox("Export")
         exportSettingsGroupBoxLayout = qtw.QVBoxLayout()
         exportSettingsGroupBox.setLayout(exportSettingsGroupBoxLayout)
 
@@ -44,12 +45,39 @@ class SettingsMenu(qtw.QDialog):
 
         self.mainLayout.addWidget(exportSettingsGroupBox)
 
+    def buildAutoSaveForm(self):
+        autoSaveSettingsGroupBox = qtw.QGroupBox("Auto Save")
+        autoSaveSettingsGroupBoxLayout = qtw.QVBoxLayout()
+        autoSaveSettingsGroupBox.setLayout(autoSaveSettingsGroupBoxLayout)
+
+        autoSaveWidget = qtw.QWidget()
+        autoSaveLayout = qtw.QHBoxLayout()
+        autoSaveWidget.setLayout(autoSaveLayout)
+
+        self.autoSaveCurrent = qtw.QLineEdit(str(self.settings['autoSave']))
+        self.autoSaveCurrent.setReadOnly(True)
+        self.autoSaveSelector = qtw.QCheckBox("Auto Save")
+        self.autoSaveSelector.setChecked(self.settings['autoSave'])
+        self.autoSaveSelector.clicked.connect(self.getAutoSave)
+
+
+        autoSaveLayout.addWidget(self.autoSaveCurrent)
+        autoSaveLayout.addWidget(self.autoSaveSelector)
+
+        autoSaveSettingsGroupBoxLayout.addWidget(autoSaveWidget)
+
+        self.mainLayout.addWidget(autoSaveSettingsGroupBox)
 
     def getExportPath(self):
         fileDialog = qtw.QFileDialog()
         exportPath = fileDialog.getExistingDirectory(self, "Choose Export Path")
         self.exportPathCurrent.setText(exportPath)
         self.settings['exportPath'] = exportPath
+
+    def getAutoSave(self):
+        enabled = self.autoSaveSelector.isChecked()
+        self.settings['autoSave'] = enabled
+        self.autoSaveCurrent.setText(str(enabled))
 
     def build(self):
         saveButton = qtw.QPushButton("Save")

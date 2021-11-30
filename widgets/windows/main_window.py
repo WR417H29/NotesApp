@@ -32,7 +32,7 @@ class MainWindow(qtw.QMainWindow):
         self.notesList = NotesList(self.connectionString, self.openNote, self.createNote)
         self.notesList.setMinimumWidth(200)
 
-        self.noteView = NoteView(self.connectionString, self.notesList)
+        self.noteView = NoteView(self.connectionString, self.notesList, self.settingsPath)
         
         self.initaliseMenuBar()
 
