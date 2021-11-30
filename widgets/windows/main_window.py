@@ -6,7 +6,10 @@ from PyQt6 import (
 )
 
 from data.export_options import ExportOptions
-from widgets.settings_menu import SettingsMenu
+from data.note_repository import NoteRepository
+
+from widgets.windows.import_menu import ImportMenu
+from widgets.windows.settings_menu import SettingsMenu
 
 from widgets.views.notes_list import NotesList
 from widgets.views.note_view import NoteView
@@ -18,16 +21,18 @@ class MainWindow(qtw.QMainWindow):
         self.settingsPath = "assets/settings.json"
         self.init_db()
 
+        self.noteRepo = NoteRepository(self.connectionString)
+
         self.title = "Notes App"
         self.windowSize = [1920//6, 1080//6, 1920//1.5, 1080//1.5]
         self.mainWidget = qtw.QWidget()
 
         self.exportOptions = ExportOptions(self.connectionString, self.settingsPath)
 
-        self.listView = NotesList(self.connectionString, self.openNote, self.createNote)
-        self.listView.setMinimumWidth(200)
+        self.notesList = NotesList(self.connectionString, self.openNote, self.createNote)
+        self.notesList.setMinimumWidth(200)
 
-        self.noteView = NoteView(self.connectionString, self.listView)
+        self.noteView = NoteView(self.connectionString, self.notesList)
         
         self.initaliseMenuBar()
 
@@ -36,7 +41,7 @@ class MainWindow(qtw.QMainWindow):
 
     def build(self):
         self.mainLayout = qtw.QHBoxLayout()
-        self.mainLayout.addWidget(self.listView)  
+        self.mainLayout.addWidget(self.notesList)  
         self.mainLayout.addWidget(self.noteView, 2)
         self.mainWidget.setLayout(self.mainLayout)
 
@@ -50,6 +55,10 @@ class MainWindow(qtw.QMainWindow):
         file = self._menuBar.addMenu("File")
         settings = self._menuBar.addMenu("Settings")
 
+        new = file.addAction("New")
+        new.triggered.connect(self.createNote)
+        new.setShortcut(qtg.QKeySequence("Ctrl+N"))
+
         save = file.addAction("Save")
         save.triggered.connect(self.noteView.saveNote)
         save.setShortcut(qtg.QKeySequence("Ctrl+S"))
@@ -58,13 +67,23 @@ class MainWindow(qtw.QMainWindow):
         export.triggered.connect(self.exportOptions.exportFolderAsText)
         export.setShortcut(qtg.QKeySequence("Ctrl+E"))
 
+        userImport = file.addAction("Import")
+        userImport.triggered.connect(self.importFile)
+
         settingsMenu = settings.addAction("Menu")
         settingsMenu.triggered.connect(self.openSettings)
+
+        clearStorage = settings.addAction("Clear Notes")
+        clearStorage.triggered.connect(self.clearDb)
 
 
     def openSettings(self):
         settingsMenu = SettingsMenu(self.settingsPath)
         settingsMenu.exec()
+
+    def importFile(self):
+        importMenu = ImportMenu(self.connectionString, self.openNote, self.notesList.populateScrollItems)
+        importMenu.exec()
 
     def init_db(self):
         con = sql.connect(self.connectionString)
@@ -87,9 +106,15 @@ class MainWindow(qtw.QMainWindow):
         con.commit()
         con.close()
 
+    def clearDb(self):
+        for note in self.noteRepo.getAllNotes():
+            self.noteRepo.deleteNote(note.id)
+        self.notesList.populateScrollItems()
+
     def openNote(self, id):
         self.noteView.openNote(id)
     
     def createNote(self):
         self.noteView.createNote()
+        self.notesList.populateScrollItems()
     
