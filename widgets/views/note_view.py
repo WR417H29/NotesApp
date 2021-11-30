@@ -1,7 +1,9 @@
 import json
-from PyQt6.QtCore import QTimer
 
-import PyQt6.QtWidgets as qtw
+from PyQt6 import (
+    QtWidgets as qtw,
+    QtCore as qtc
+)
 
 from models.note import Note
 from data.note_repository import NoteRepository
@@ -18,7 +20,7 @@ class NoteView(qtw.QWidget):
             self.settings = json.load(f)
 
         if self.settings['autoSave']:
-            self.timer = QTimer()
+            self.timer = qtc.QTimer()
             self.timer.setInterval(1000)
             self.timer.timeout.connect(self.saveNote)
             self.timer.start()
@@ -38,7 +40,6 @@ class NoteView(qtw.QWidget):
         self.setLayout(self.mainLayout)
     
     def saveNote(self):
-        print("Saving...")
         if self.currentId == None: return
         
         note = Note(self.currentId, self.titleRow.text(), self.noteBody.toPlainText())

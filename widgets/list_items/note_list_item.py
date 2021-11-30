@@ -1,5 +1,7 @@
-import PyQt6.QtWidgets as qtw
-import PyQt6.QtGui as qtg
+from PyQt6 import (
+    QtWidgets as qtw,
+    QtGui as qtg
+)
 
 from data.note_repository import NoteRepository
 

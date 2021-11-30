@@ -1,5 +1,7 @@
-import PyQt6.QtWidgets as qtw
-import PyQt6.QtCore as qtc
+from PyQt6 import (
+    QtWidgets as qtw,
+    QtCore as qtc
+)
 
 from widgets.list_items.note_list_item import NoteListItem
 from data.note_repository import NoteRepository

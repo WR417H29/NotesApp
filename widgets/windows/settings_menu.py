@@ -1,8 +1,7 @@
 import json
 
 from PyQt6 import (
-    QtWidgets as qtw,
-    QtCore as qtc
+    QtWidgets as qtw
 )
 
 class SettingsMenu(qtw.QDialog):
@@ -13,7 +12,6 @@ class SettingsMenu(qtw.QDialog):
         self.settingsPath = settingsPath
         with open (settingsPath, 'r') as f:
             self.settings = json.load(f)
-        
 
         self.mainLayout = qtw.QVBoxLayout()
 

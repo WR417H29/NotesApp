@@ -1,6 +1,8 @@
 import sys
 
-import PyQt6.QtWidgets as qtw
+from PyQt6 import (
+    QtWidgets as qtw
+)
 
 from widgets.windows.main_window import MainWindow
 
