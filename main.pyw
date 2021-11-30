@@ -1,4 +1,4 @@
-#!C:\Users\iacna\..Programming\Desktop\NotesApp\.env\Scripts\pythonw.exe
+#!.env\Scripts\pythonw.exe
 
 import sys
 
