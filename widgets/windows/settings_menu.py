@@ -88,6 +88,6 @@ class SettingsMenu(qtw.QDialog):
 
     def saveChanges(self):
         with open (self.settingsPath, 'w') as f:
-            json.dump(self.settings, f)
+            json.dump(self.settings, f, indent=4)
         
         self.done(0)
